@@ -98,6 +98,16 @@ dwarf_diename_integrate (Dwarf_Debug dbg, Dwarf_Die die)
   return name;
 }
 
+static const char *
+dwarf_decl_file (Dwarf_Debug dbg, CU_Data cudata, Dwarf_Die die)
+{
+  const char *file = NULL;
+  Dwarf_Unsigned file_index = dwarf_attr_unum (dbg, die, DW_AT_decl_file);
+  if (file_index > 0 && file_index <= cudata->nsrcfiles)
+    file = cudata->srcfiles[file_index - 1];
+  return file;
+}
+
 static bool
 has_nontrivial_type (Dwarf_Debug dbg, Dwarf_Die die)
 {
@@ -165,10 +175,7 @@ process_function (Dwarf_Debug dbg, CU_Data cudata, Dwarf_Die function)
 {
   bool printed_function_name = false;
 
-  const char *file = NULL;
-  Dwarf_Unsigned file_index = dwarf_attr_unum (dbg, function, DW_AT_decl_file);
-  if (file_index > 0 && file_index <= cudata->nsrcfiles)
-    file = cudata->srcfiles[file_index - 1];
+  const char *file = dwarf_decl_file (dbg, cudata, function);
   if (!file || in_system_header (file))
     return;
 
@@ -194,7 +201,7 @@ process_function (Dwarf_Debug dbg, CU_Data cudata, Dwarf_Die function)
                   Dwarf_Unsigned line = dwarf_attr_unum (dbg, child, DW_AT_decl_line);
                   fprintf (stderr,
                            "%s:%" DW_PR_DUu ": note: parameter ‘%s’ type is not trivial\n",
-                           file, line, diename);
+                           dwarf_decl_file (dbg, cudata, child), line, diename);
                   dwarf_dealloc (dbg, diename, DW_DLA_STRING);
                 }
             }
