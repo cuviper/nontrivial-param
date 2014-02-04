@@ -62,7 +62,7 @@ This tool uses `libdw` and `libdwfl` from [elfutils], and the code is in
 ## Using Dyninst
 
 This tool uses [Dyninst SymtabAPI], and the code is in
-[dyninst-nontrivial-param.c](./dyninst-nontrivial-param.c).
+[dyninst-nontrivial-param.cc](./dyninst-nontrivial-param.cc).
 
 ### Advantages
 
