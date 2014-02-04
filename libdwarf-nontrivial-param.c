@@ -53,24 +53,6 @@ dwarf_attr_die (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
   return attr_die;
 }
 
-static Dwarf_Unsigned
-dwarf_attr_unum (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
-{
-  Dwarf_Unsigned unum = UINT64_MAX;
-  Dwarf_Attribute attr_val;
-  if (dwarf_attr (die, attr, &attr_val, NULL) == DW_DLV_OK)
-    {
-      if (dwarf_formudata (attr_val, &unum, NULL) != DW_DLV_OK)
-        {
-          Dwarf_Signed snum;
-          if (dwarf_formsdata (attr_val, &snum, NULL) == DW_DLV_OK)
-            unum = snum;
-        }
-      dwarf_dealloc (dbg, attr_val, DW_DLA_ATTR);
-    }
-  return unum;
-}
-
 static Dwarf_Attribute
 dwarf_attr_integrate (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
 {
@@ -86,6 +68,24 @@ dwarf_attr_integrate (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
         }
     }
   return attr_val;
+}
+
+static Dwarf_Unsigned
+dwarf_attr_unum (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
+{
+  Dwarf_Unsigned unum = UINT64_MAX;
+  Dwarf_Attribute attr_val = dwarf_attr_integrate (dbg, die, attr);
+  if (attr_val)
+    {
+      if (dwarf_formudata (attr_val, &unum, NULL) != DW_DLV_OK)
+        {
+          Dwarf_Signed snum;
+          if (dwarf_formsdata (attr_val, &snum, NULL) == DW_DLV_OK)
+            unum = snum;
+        }
+      dwarf_dealloc (dbg, attr_val, DW_DLA_ATTR);
+    }
+  return unum;
 }
 
 static char *
