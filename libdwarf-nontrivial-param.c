@@ -81,7 +81,7 @@ dwarf_attr_integrate (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
       if (origin)
         {
           attr_val = dwarf_attr_integrate (dbg, origin, attr);
-          dwarf_dealloc (dbg, attr_val, DW_DLA_DIE);
+          dwarf_dealloc (dbg, origin, DW_DLA_DIE);
         }
     }
   return attr_val;
