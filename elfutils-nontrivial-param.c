@@ -34,8 +34,8 @@ function_name (Dwarf_Die *function)
 {
   const char *linkage_name;
   Dwarf_Attribute linkage_attr;
-  if ((dwarf_attr (function, DW_AT_linkage_name, &linkage_attr) ||
-       dwarf_attr (function, DW_AT_MIPS_linkage_name, &linkage_attr))
+  if ((dwarf_attr_integrate (function, DW_AT_linkage_name, &linkage_attr) ||
+       dwarf_attr_integrate (function, DW_AT_MIPS_linkage_name, &linkage_attr))
       && (linkage_name = dwarf_formstring (&linkage_attr)))
     return cplus_demangle (linkage_name, DMGL_PARAMS);
 
