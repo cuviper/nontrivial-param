@@ -18,7 +18,7 @@
 typedef struct CU_Data_s
 {
   char **srcfiles;
-  Dwarf_Signed nsrcfiles;
+  Dwarf_Unsigned nsrcfiles;
 } *CU_Data;
 
 
@@ -53,21 +53,22 @@ dwarf_attr_die (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
   return attr_die;
 }
 
-static Dwarf_Signed
-dwarf_attr_num (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
+static Dwarf_Unsigned
+dwarf_attr_unum (Dwarf_Debug dbg, Dwarf_Die die, Dwarf_Half attr)
 {
-  Dwarf_Signed num = INT64_MIN;
+  Dwarf_Unsigned unum = UINT64_MAX;
   Dwarf_Attribute attr_val;
   if (dwarf_attr (die, attr, &attr_val, NULL) == DW_DLV_OK)
     {
-      Dwarf_Unsigned unum;
-      if (dwarf_formudata (attr_val, &unum, NULL) == DW_DLV_OK)
-        num = unum;
-      else
-        dwarf_formsdata (attr_val, &num, NULL);
+      if (dwarf_formudata (attr_val, &unum, NULL) != DW_DLV_OK)
+        {
+          Dwarf_Signed snum;
+          if (dwarf_formsdata (attr_val, &snum, NULL) == DW_DLV_OK)
+            unum = snum;
+        }
       dwarf_dealloc (dbg, attr_val, DW_DLA_ATTR);
     }
-  return num;
+  return unum;
 }
 
 static Dwarf_Attribute
@@ -165,7 +166,7 @@ process_function (Dwarf_Debug dbg, CU_Data cudata, Dwarf_Die function)
   bool printed_function_name = false;
 
   const char *file = NULL;
-  Dwarf_Signed file_index = dwarf_attr_num (dbg, function, DW_AT_decl_file);
+  Dwarf_Unsigned file_index = dwarf_attr_unum (dbg, function, DW_AT_decl_file);
   if (file_index > 0 && file_index <= cudata->nsrcfiles)
     file = cudata->srcfiles[file_index - 1];
   if (!file || in_system_header (file))
@@ -190,9 +191,10 @@ process_function (Dwarf_Debug dbg, CU_Data cudata, Dwarf_Die function)
               char *diename = dwarf_diename_integrate (dbg, child);
               if (diename)
                 {
-                  Dwarf_Signed line = dwarf_attr_num (dbg, child, DW_AT_decl_line);
-                  fprintf (stderr, "%s:%i: note: parameter ‘%s’ type is not trivial\n",
-                           file, (int)line, diename);
+                  Dwarf_Unsigned line = dwarf_attr_unum (dbg, child, DW_AT_decl_line);
+                  fprintf (stderr,
+                           "%s:%" DW_PR_DUu ": note: parameter ‘%s’ type is not trivial\n",
+                           file, line, diename);
                   dwarf_dealloc (dbg, diename, DW_DLA_STRING);
                 }
             }
@@ -276,13 +278,17 @@ main (int argc, char *argv[])
           if (dwarf_tag (cudie, &cutag, NULL) == DW_DLV_OK
               && cutag == DW_TAG_compile_unit)
             {
+              // libdwarf, why is this signed?  DW_AT_decl_file is unsigned...
+              Dwarf_Signed nsrcfiles;
               struct CU_Data_s cudata;
               if (dwarf_srcfiles (cudie, &cudata.srcfiles,
-                                  &cudata.nsrcfiles, NULL) == DW_DLV_OK)
+                                  &nsrcfiles, NULL) == DW_DLV_OK
+                  && nsrcfiles >= 0)
                 {
+                  cudata.nsrcfiles = (Dwarf_Unsigned) nsrcfiles;
                   search_functions (dbg, &cudata, cudie);
 
-                  for (Dwarf_Signed i = 0; i < cudata.nsrcfiles; ++i)
+                  for (Dwarf_Unsigned i = 0; i < cudata.nsrcfiles; ++i)
                     dwarf_dealloc(dbg, cudata.srcfiles[i], DW_DLA_STRING);
                   dwarf_dealloc(dbg, cudata.srcfiles, DW_DLA_LIST);
                 }
