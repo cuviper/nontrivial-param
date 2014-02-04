@@ -1,0 +1,4 @@
+*.o
+/dyninst-nontrivial-param
+/elfutils-nontrivial-param
+/libdwarf-nontrivial-param
