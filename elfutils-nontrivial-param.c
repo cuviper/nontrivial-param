@@ -73,9 +73,9 @@ process_function (Dwarf_Die *function, void *arg __attribute__ ((unused)))
             }
 
           int line = -1;
-          dwarf_decl_line (function, &line);
+          dwarf_decl_line (&child, &line);
           fprintf (stderr, "%s:%i: note: parameter ‘%s’ type is not trivial\n",
-                  file, line, dwarf_diename (&child));
+                   dwarf_decl_file (&child), line, dwarf_diename (&child));
         }
     while (dwarf_siblingof (&child, &child) == 0);
 
