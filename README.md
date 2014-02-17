@@ -22,8 +22,8 @@ may easily be parsed by things like Vim quickfix.
 #### Table of Contents
 - [Using gcc-python-plugin](#using-gcc-python-plugin)
 - [Using elfutils](#using-elfutils)
-- [Using Dyninst](#using-dyninst)
 - [Using libdwarf](#using-libdwarf)
+- [Using Dyninst](#using-dyninst)
 - [Using dwgrep](#using-dwgrep)
 
 ## Using gcc-python-plugin
@@ -65,16 +65,6 @@ This tool uses `libdw` and `libdwfl` from [elfutils], and the code is in
 #### Disadvantages
 
 
-## Using Dyninst
-
-This tool uses [Dyninst SymtabAPI], and the code is in
-[dyninst-nontrivial-param.cc](./dyninst-nontrivial-param.cc).
-
-#### Advantages
-
-#### Disadvantages
-
-
 ## Using libdwarf
 
 This tool uses [libdwarf] (formerly from SGI), and the code is in
@@ -85,10 +75,19 @@ This tool uses [libdwarf] (formerly from SGI), and the code is in
 #### Disadvantages
 
 
+## Using Dyninst
+
+This tool uses [Dyninst SymtabAPI], and the code is in
+[dyninst-nontrivial-param.cc](./dyninst-nontrivial-param.cc).
+
+#### Advantages
+
+#### Disadvantages
+
+
 ## Using dwgrep
 
-Petr Machata has written an experimental tool called
-[dwgrep](https://github.com/pmachata/dwgrep),
+Petr Machata has written an experimental tool called [dwgrep],
 which is currently hard-coded to perform this exact nontrivial-param
 search.  When dwgrep develops a syntax for specifying search conditions,
 it should still be possible to express this problem in only a few lines.
@@ -101,5 +100,6 @@ it should still be possible to express this problem in only a few lines.
 [original blog post]: http://blog.cuviper.com/2014/01/23/add-new-warnings-to-gcc-with-python/
 [gcc-python-plugin]: https://fedorahosted.org/gcc-python-plugin/
 [elfutils]: https://fedorahosted.org/elfutils/
-[Dyninst SymtabAPI]: http://www.dyninst.org/symtab
 [libdwarf]: http://www.prevanders.net/dwarf.html
+[Dyninst SymtabAPI]: http://www.dyninst.org/symtab
+[dwgrep]: https://github.com/pmachata/dwgrep
