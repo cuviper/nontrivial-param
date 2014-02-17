@@ -79,6 +79,19 @@ This tool uses [libdwarf] (formerly from SGI), and the code is in
 ### Disadvantages
 
 
+## Using dwgrep
+
+Petr Machata has written an experimental tool called
+[dwgrep](https://github.com/pmachata/dwgrep),
+which is currently hard-coded to perform this exact nontrivial-param
+search.  When dwgrep develops a syntax for specifying search conditions,
+it should still be possible to express this problem in only a few lines.
+
+### Advantages
+
+### Disadvantages
+
+
 [original blog post]: http://blog.cuviper.com/2014/01/23/add-new-warnings-to-gcc-with-python/
 [gcc-python-plugin]: https://fedorahosted.org/gcc-python-plugin/
 [elfutils]: https://fedorahosted.org/elfutils/
