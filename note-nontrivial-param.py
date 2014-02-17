@@ -1,7 +1,6 @@
 import gcc
 
 def in_system_header(loc):
-    return False
     if hasattr(loc, "in_system_header"):
         return loc.in_system_header
     # approximate it
