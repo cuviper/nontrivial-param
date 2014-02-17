@@ -34,7 +34,7 @@ test.cc:2:30: note: parameter type is not trivial
                               ^
 ```
 
-### Advantages
+#### Advantages
 
 - It gets to leverage the compiler for the nice location information,
   including the column number and the associated source line with a caret
@@ -42,7 +42,7 @@ test.cc:2:30: note: parameter type is not trivial
 - It could be changed to a *warning* rather than a *note*, and then stop the
   build when `-Werror` is used.
 
-### Disadvantages
+#### Disadvantages
 
 - It can't be used with other compilers. (However, others may have their own
   plugin technique.)
@@ -54,9 +54,9 @@ test.cc:2:30: note: parameter type is not trivial
 This tool uses `libdw` and `libdwfl` from [elfutils], and the code is in
 [elfutils-nontrivial-param.c](./elfutils-nontrivial-param.c).
 
-### Advantages
+#### Advantages
 
-### Disadvantages
+#### Disadvantages
 
 
 ## Using Dyninst
@@ -64,9 +64,9 @@ This tool uses `libdw` and `libdwfl` from [elfutils], and the code is in
 This tool uses [Dyninst SymtabAPI], and the code is in
 [dyninst-nontrivial-param.cc](./dyninst-nontrivial-param.cc).
 
-### Advantages
+#### Advantages
 
-### Disadvantages
+#### Disadvantages
 
 
 ## Using libdwarf
@@ -74,9 +74,9 @@ This tool uses [Dyninst SymtabAPI], and the code is in
 This tool uses [libdwarf] (formerly from SGI), and the code is in
 [libdwarf-nontrivial-param.c](./libdwarf-nontrivial-param.c).
 
-### Advantages
+#### Advantages
 
-### Disadvantages
+#### Disadvantages
 
 
 ## Using dwgrep
@@ -87,9 +87,9 @@ which is currently hard-coded to perform this exact nontrivial-param
 search.  When dwgrep develops a syntax for specifying search conditions,
 it should still be possible to express this problem in only a few lines.
 
-### Advantages
+#### Advantages
 
-### Disadvantages
+#### Disadvantages
 
 
 [original blog post]: http://blog.cuviper.com/2014/01/23/add-new-warnings-to-gcc-with-python/
