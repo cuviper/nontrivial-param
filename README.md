@@ -19,6 +19,12 @@ write such an analysis tool with different libraries.
 Additionally, each tool tries to mimic the same compiler-like output, so they
 may easily be parsed by things like Vim quickfix.
 
+#### Table of Contents
+- [Using gcc-python-plugin](#using-gcc-python-plugin)
+- [Using elfutils](#using-elfutils)
+- [Using Dyninst](#using-dyninst)
+- [Using libdwarf](#using-libdwarf)
+- [Using dwgrep](#using-dwgrep)
 
 ## Using gcc-python-plugin
 
