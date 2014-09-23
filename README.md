@@ -87,10 +87,9 @@ This tool uses [Dyninst SymtabAPI], and the code is in
 
 ## Using dwgrep
 
-Petr Machata has written an experimental tool called [dwgrep],
-which is currently hard-coded to perform this exact nontrivial-param
-search.  When dwgrep develops a syntax for specifying search conditions,
-it should still be possible to express this problem in only a few lines.
+Petr Machata has written an experimental tool, [dwgrep], which can perform
+graph queries on debuginfo.  A script for this problem is in
+[nontrivial-param.dwgrep](./nontrivial-param.dwgrep).
 
 #### Advantages
 
