@@ -2,9 +2,9 @@
 //bin/true && exec dwgrep -f "$0" "$@"
 
 # Find all functions except those from system headers
-let FUNC := die ?TAG_subprogram !AT_declaration
+let FUNC := entry ?TAG_subprogram !AT_declaration
             ?((!AT_decl_file integrate)* @AT_decl_file
-              (!~ "^/usr/" || =~ "^/usr/src/debug/"));
+              ("/usr/" !starts || "/usr/src/debug/" ?starts));
 
 # Find parameters of said functions which boil down to struct/class types
 let PARAM := FUNC child ?TAG_formal_parameter
