@@ -3,19 +3,18 @@
 
 # Find all functions except those from system headers
 let FUNC := entry ?TAG_subprogram !AT_declaration
-            ?((!AT_decl_file integrate)* @AT_decl_file
-              ("/usr/" !starts || "/usr/src/debug/" ?starts));
+            ?(@AT_decl_file ("/usr/" !starts || "/usr/src/debug/" ?starts));
 
 # Find parameters of said functions which boil down to struct/class types
 let PARAM := FUNC child ?TAG_formal_parameter
-             ?(@AT_type
+             ?(raw @AT_type
                ((?TAG_const_type, ?TAG_volatile_type, ?TAG_typedef) @AT_type)*
                (?TAG_structure_type, ?TAG_class_type));
 
 drop # don't print the remaining Dwarf on the stack
 
 
-"%( PARAM (!AT_decl_file integrate)* @AT_decl_file || "???" %):"\
-"%( PARAM (!AT_decl_line integrate)* @AT_decl_line || "???" %):"\
-" note: In function `%( FUNC (!AT_name integrate)* @AT_name || "???" %)',"\
-" parameter `%( PARAM (!AT_name integrate)* @AT_name || "???" %)' type is not trivial"
+"%( PARAM @AT_decl_file || "???" %):"\
+"%( PARAM @AT_decl_line || "???" %):"\
+" note: In function `%( FUNC name || "???" %)',"\
+" parameter `%( PARAM name || "???" %)' type is not trivial"
