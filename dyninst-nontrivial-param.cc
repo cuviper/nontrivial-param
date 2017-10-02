@@ -21,11 +21,15 @@ has_nontrivial_type (Type *type)
     }
 }
 
+static bool
+has_function_name (Function *function) {
+  return function->typed_names_begin() != function->typed_names_end();
+}
+
 static string
 function_name (Function *function)
 {
-  auto &names = function->getAllTypedNames();
-  return !names.empty() ? names[0] : "(null)";
+  return has_function_name (function) ? *function->typed_names_begin() : "(null)";
 }
 
 static bool
@@ -51,8 +55,7 @@ process_function (Function *function)
 
       if (!printed_function_name)
         {
-          auto &names = function->getAllTypedNames();
-          if (!names.empty())
+          if (has_function_name (function))
             cerr << parameter->getFileName() << ": In function ‘"
                  << function_name (function) << "’:" << endl;
           printed_function_name = true;
